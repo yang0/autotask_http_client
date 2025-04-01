@@ -2,16 +2,21 @@ import asyncio
 from application_tools import ToolsClient
 import json
 
-async def test_list_directory():
-    """Test listing directory using ToolsClient"""
+async def test_filelistnode():
+    """Test File List using ToolsClient"""
     try:
         async with ToolsClient() as client:
-            # Execute ListDirectoryNode
+            # Execute File List
             result = await client.run_node(
-                "dynamic.mcp.file_system.ListDirectoryNode",
-                {"path": "E:/"}
+                "autotask_core.nodes.file.FileListNode",
+                {
+                    "directory": "",
+                    "pattern": "",
+                    "include_dirs": "true",
+                    "recursive": "false"
+                }
             )
-            print("Directory listing result:", json.dumps(result, indent=2, ensure_ascii=False))
+            print("Execution result:", json.dumps(result, indent=2, ensure_ascii=False))
             return result
     except Exception as e:
         print("Execution failed:", str(e))
@@ -22,7 +27,7 @@ async def test_node_info():
     try:
         async with ToolsClient() as client:
             # Get node information
-            info = await client.get_node_info("dynamic.mcp.file_system.ListDirectoryNode")
+            info = await client.get_node_info("autotask_core.nodes.file.FileListNode")
             print("Node information:", json.dumps(info, indent=2, ensure_ascii=False))
             return info
     except Exception as e:
@@ -81,9 +86,9 @@ def run_tests():
     print("\n=== Testing List All Nodes ===")
     loop.run_until_complete(test_list_nodes())
     
-    # Test listing directory
-    print("\n=== Testing List Directory ===")
-    loop.run_until_complete(test_list_directory())
+    # Test file list
+    print("\n=== Testing File List ===")
+    loop.run_until_complete(test_filelistnode())
 
 if __name__ == "__main__":
     run_tests()
